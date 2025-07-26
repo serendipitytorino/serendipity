@@ -44,7 +44,7 @@
 </a>
     </header>
 
-    <main>
+    <main class="content-hidden">
         <!-- --- Intro Section --- -->
         <section id="intro" class="content-section">
             <div class="container">
@@ -382,6 +382,25 @@
         </section>
     </main>
 
+    <!-- --- Login Modal --- -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <form id="login-form">
+                <h2>Login</h2>
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit">Accedi</button>
+            </form>
+        </div>
+    </div>
+
     <!-- --- Footer --- -->
 <footer>
     <div class="container footer-content">
@@ -480,6 +499,40 @@
                 slides[slideIndex-1].style.display = "block";
                 dots[slideIndex-1].className += " active";
             }
+
+            // Login Modal
+            const loginModal = document.getElementById('login-modal');
+            const closeBtn = document.querySelector('.modal .close-btn');
+
+            loginModal.style.display = 'block';
+            document.body.classList.add('modal-open');
+
+            closeBtn.addEventListener('click', () => {
+                loginModal.style.display = 'none';
+                document.body.classList.remove('modal-open');
+            });
+
+            window.addEventListener('click', (event) => {
+                if (event.target == loginModal) {
+                    loginModal.style.display = 'none';
+                    document.body.classList.remove('modal-open');
+                }
+            });
+
+            document.getElementById('login-form').addEventListener('submit', function(event) {
+                event.preventDefault();
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+
+                if (username === 'daniela' && password === 'daniela') {
+                    alert('Login effettuato con successo!');
+                    loginModal.style.display = 'none';
+                    document.body.classList.remove('modal-open');
+                    document.querySelector('main').classList.remove('content-hidden');
+                } else {
+                    alert('Credenziali non valide');
+                }
+            });
         });
     </script>
 
