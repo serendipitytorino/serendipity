@@ -4,57 +4,154 @@
   <meta charset="UTF-8">
   <title>Calendario disponibilità</title>
   <style>
-    body { font-family: Arial; padding: 20px; }
-    table { border-collapse: collapse; width: 100%; max-width: 600px; }
-    th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
-    th { background-color: #f2f2f2; }
-    .libero { background-color: #c6f6c6; }
-    .occupato { background-color: #f6c6c6; }
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+    h2 {
+      text-align: center;
+    }
+    .calendar-nav {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+    .day-name {
+      font-weight: bold;
+      text-align: center;
+      background-color: #f0f0f0;
+      padding: 6px;
+    }
+    .day {
+      height: 70px;
+      padding: 6px;
+      text-align: right;
+      border: 1px solid #ddd;
+    }
+    .occupato {
+      background-color: #f6c6c6;
+    }
+    .libero {
+      background-color: #c6f6c6;
+    }
+    .vuoto {
+      background-color: #f9f9f9;
+    }
+    .mese {
+      margin-top: 40px;
+    }
+    .mese h3 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 6px 12px;
+      margin: 0 10px;
+    }
   </style>
 </head>
 <body>
 
 <h2>Disponibilità camere</h2>
-<table id="calendario">
-  <thead>
-    <tr>
-      <th>Data</th>
-      <th>Stato</th>
-    </tr>
-  </thead>
-  <tbody>
-    <!-- Le righe verranno inserite qui -->
-  </tbody>
-</table>
+<div class="calendar-nav">
+  <button onclick="cambiaMese(-1)">⬅️ Mese precedente</button>
+  <button onclick="cambiaMese(1)">Mese successivo ➡️</button>
+</div>
+<div id="calendari"></div>
 
 <script>
-  const URL_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTI8m3jfbxn7IW-rCsWe-XMwQ_GdLV-6wrJaxi69ZFKrXCyMXH9nZzqQH49do_G7OpaqAVhBlH-YqZD/pub?output=csv"; // ← sostituisci con il tuo link
+  const urlCSV = "https://docs.google.com/spreadsheets/d/1y1zN6TsGKDHXr7fdOCkbH3IXMouSuefamQvHtpxASOw/gviz/tq?tqx=out:csv";
+  let disponibilita = {};
+  let meseCorrente = new Date().getMonth();
+  let annoCorrente = new Date().getFullYear();
 
-  // Funzione per convertire data da DD-MM-YYYY a YYYY-MM-DD
-  function convertiDataDDMMYYYY(dataStr) {
-    const [gg, mm, aaaa] = dataStr.split("-");
-    return `${aaaa}-${mm}-${gg}`; // formato ISO
+  function caricaDati(callback) {
+    fetch(urlCSV)
+      .then(r => r.text())
+      .then(text => {
+        const righe = text.trim().split("\n").slice(1); // salta intestazione
+        righe.forEach(riga => {
+          const [data, stato] = riga.split(",");
+          const [gg, mm, aaaa] = data.trim().split("/"); // formato DD/MM/YYYY
+          const dataISO = `${aaaa}-${mm.padStart(2, "0")}-${gg.padStart(2, "0")}`;
+          disponibilita[dataISO] = stato.trim().toLowerCase();
+        });
+        callback();
+      });
   }
 
-  fetch(URL_CSV)
-    .then(response => response.text())
-    .then(csv => {
-      const righe = csv.trim().split("\n").slice(1); // Salta intestazione
-      const tabella = document.querySelector("#calendario tbody");
+  function generaCalendario(mese, anno) {
+    const meseNome = new Date(anno, mese).toLocaleString('it-IT', { month: 'long' });
+    const titolo = `${meseNome.charAt(0).toUpperCase() + meseNome.slice(1)} ${anno}`;
 
-      righe.forEach(riga => {
-        const [dataDDMMYYYY, statoRaw] = riga.split(",");
-        const dataISO = convertiDataDDMMYYYY(dataDDMMYYYY.trim());
-        const stato = statoRaw.trim().toLowerCase();
+    const primoGiorno = new Date(anno, mese, 1).getDay();
+    const giorniNelMese = new Date(anno, mese + 1, 0).getDate();
 
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${dataDDMMYYYY}</td>
-          <td class="${stato}">${stato.charAt(0).toUpperCase() + stato.slice(1)}</td>
-        `;
-        tabella.appendChild(tr);
-      });
-    });
+    const griglia = document.createElement("div");
+    griglia.className = "calendar-grid mese";
+    griglia.innerHTML = `<h3>${titolo}</h3>`;
+
+    const giorniSettimana = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
+    for (let g of giorniSettimana) {
+      const el = document.createElement("div");
+      el.className = "day-name";
+      el.textContent = g;
+      griglia.appendChild(el);
+    }
+
+    let offset = (new Date(anno, mese, 1).getDay() + 6) % 7;
+    for (let i = 0; i < offset; i++) {
+      const vuoto = document.createElement("div");
+      vuoto.className = "day vuoto";
+      griglia.appendChild(vuoto);
+    }
+
+    for (let giorno = 1; giorno <= giorniNelMese; giorno++) {
+      const data = `${anno}-${String(mese + 1).padStart(2, '0')}-${String(giorno).padStart(2, '0')}`;
+      const stato = disponibilita[data] || "";
+      const cella = document.createElement("div");
+      cella.className = "day";
+      if (stato === "libero") cella.classList.add("libero");
+      if (stato === "occupato") cella.classList.add("occupato");
+      cella.innerHTML = `<small>${giorno}</small>`;
+      griglia.appendChild(cella);
+    }
+
+    return griglia;
+  }
+
+  function mostraCalendari() {
+    const contenitore = document.getElementById("calendari");
+    contenitore.innerHTML = "";
+    contenitore.appendChild(generaCalendario(meseCorrente, annoCorrente));
+    let mese2 = meseCorrente + 1;
+    let anno2 = annoCorrente;
+    if (mese2 > 11) {
+      mese2 = 0;
+      anno2++;
+    }
+    contenitore.appendChild(generaCalendario(mese2, anno2));
+  }
+
+  function cambiaMese(delta) {
+    meseCorrente += delta;
+    if (meseCorrente > 11) {
+      meseCorrente = 0;
+      annoCorrente++;
+    } else if (meseCorrente < 0) {
+      meseCorrente = 11;
+      annoCorrente--;
+    }
+    mostraCalendari();
+  }
+
+  caricaDati(mostraCalendari);
 </script>
 
 </body>
