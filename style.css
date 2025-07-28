@@ -12,14 +12,15 @@
 }
 
 .logo {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: var(--white);
     position: absolute;
     left: 2rem;
     top: 50%;
     transform: translateY(-50%);
+}
+
+.logo img {
+    height: 50px; /* Adjust as needed */
+    width: auto;
 }
 
 .nav-links {
@@ -519,6 +520,18 @@ body.modal-open {
     }
 }
 
+.hero-cta-button {
+    margin-bottom: 1.5rem;
+}
+
+.cta-button-red {
+    background-color: #dc3545;
+}
+
+.cta-button-red:hover {
+    background-color: #c82333;
+}
+
 .map-container-full-width {
     grid-column: 1 / -1;
     margin-top: 2rem;
@@ -924,6 +937,14 @@ a:focus-visible, button:focus-visible {
 
 #login-form button:hover {
     background-color: var(--gold);
+}
+
+
+.login-logo {
+    display: block;
+    margin: 0 auto 1.5rem auto;
+    max-width: 200px; /* Adjust as needed */
+    height: auto;
 }
 
 /* --- Login Modal --- */
