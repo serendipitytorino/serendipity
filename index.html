@@ -19,7 +19,7 @@
     <!-- --- Hero Section --- -->
     <header class="hero-section">
         <nav class="main-nav">
-            <div class="logo">Serendipity</div>
+            <div class="logo"><img src="logo_serendipity.webp" alt="Serendipity Logo"></div>
             <ul class="nav-links">
                 <li><a href="index.html">HOME</a></li>
                 <li><a href="explore.html">EXPLORE</a></li>
@@ -31,6 +31,7 @@
             </div>
         </nav>
         <div class="hero-content">
+            <a href="calendario.html" class="cta-button hero-cta-button cta-button-red"><span data-lang="it">Verifica disponibilità</span><span data-lang="en">Check availability</span></a>
             <h1>Serendipity</h1>
             <p><span data-lang="it">Casa Vacanze – Via Mombarcaro 47, Torino</span><span data-lang="en">Holiday Home – Via Mombarcaro 47, Turin</span></p>
         </div>
@@ -232,7 +233,7 @@
                 </div>
                 <div class="map-container-full-width">
                     <div class="map-container">
-                        <iframe src="https://www.google.com/maps?q=Via+Mombarcaro+47,+Torino&output=embed" allowfullscreen="" loading="lazy"></iframe>
+                        <iframe src="https://www.google.com/maps/d/embed?mid=1jvb2a5NvnJ6g5aDpuVON8M70sRc0Euw" width="640" height="480" allowfullscreen="" loading="lazy"></iframe>
                         <a href="https://www.google.com/maps/dir/?api=1&destination=Via+Mombarcaro+47+Torino" target="_blank" rel="noopener noreferrer" class="map-cta-mobile">
                             <span data-lang="it">Apri in Maps</span>
                             <span data-lang="en">Open in Maps</span>
@@ -368,13 +369,16 @@
                         </a>
                     </div>
                     <div class="cta-row">
-                        <a href="#" class="cta-button">
-                            <span data-lang="it">Prenota su Expedia</span>
-                            <span data-lang="en">Book on Expedia</span>
-                        </a>
+                        
                         <a href="#" class="cta-button">
                             <span data-lang="it">Prenota Direttamente</span>
                             <span data-lang="en">Book Directly</span>
+                        </a>
+                    </div>
+                    <div class="cta-row">
+                        <a href="calendario.html" class="cta-button cta-button-red">
+                            <span data-lang="it">Verifica disponibilità</span>
+                            <span data-lang="en">Check availability</span>
                         </a>
                     </div>
                 </div>
@@ -387,7 +391,7 @@
         <div class="modal-content">
             <span class="close-btn">&times;</span>
             <form id="login-form">
-                <h2>Login</h2>
+                <img src="logo_serendipity.webp" alt="Serendipity Logo" class="login-logo">
                 <div class="input-group">
                     <label for="username">Username</label>
                     <input type="text" id="username" name="username" required>

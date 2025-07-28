@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Calendario disponibilità</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    table { border-collapse: collapse; width: 100%; max-width: 600px; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+    th { background-color: #f2f2f2; }
+    .libero { background-color: #c6f6c6; }
+    .occupato { background-color: #f6c6c6; }
+  </style>
+</head>
+<body>
+
+<h2>Disponibilità camere</h2>
+<table id="calendario">
+  <thead>
+    <tr>
+      <th>Data</th>
+      <th>Stato</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- Le righe verranno inserite qui -->
+  </tbody>
+</table>
+
+<script>
+  const URL_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTI8m3jfbxn7IW-rCsWe-XMwQ_GdLV-6wrJaxi69ZFKrXCyMXH9nZzqQH49do_G7OpaqAVhBlH-YqZD/pub?output=csv"; // ← sostituisci con il tuo link
+
+  // Funzione per convertire data da DD-MM-YYYY a YYYY-MM-DD
+  function convertiDataDDMMYYYY(dataStr) {
+    const [gg, mm, aaaa] = dataStr.split("-");
+    return `${aaaa}-${mm}-${gg}`; // formato ISO
+  }
+
+  fetch(URL_CSV)
+    .then(response => response.text())
+    .then(csv => {
+      const righe = csv.trim().split("\n").slice(1); // Salta intestazione
+      const tabella = document.querySelector("#calendario tbody");
+
+      righe.forEach(riga => {
+        const [dataDDMMYYYY, statoRaw] = riga.split(",");
+        const dataISO = convertiDataDDMMYYYY(dataDDMMYYYY.trim());
+        const stato = statoRaw.trim().toLowerCase();
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${dataDDMMYYYY}</td>
+          <td class="${stato}">${stato.charAt(0).toUpperCase() + stato.slice(1)}</td>
+        `;
+        tabella.appendChild(tr);
+      });
+    });
+</script>
+
+</body>
+</html>
