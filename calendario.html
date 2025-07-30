@@ -3,67 +3,124 @@
 <head>
   <meta charset="UTF-8">
   <title>Calendario disponibilità</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      max-width: 800px;
+      font-family: 'Roboto', sans-serif;
+      padding: 40px;
+      max-width: 900px;
       margin: auto;
+      background-color: #f4f7fa;
+      color: #333;
     }
     h2 {
       text-align: center;
+      font-size: 2em;
+      margin-bottom: 30px;
+      color: #2c3e50;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
     }
     .calendar-nav {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 30px;
+    }
+    .calendar-nav button {
+      padding: 10px 20px;
+      margin: 0 15px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+    .calendar-nav button:hover {
+      background-color: #2980b9;
+      transform: translateY(-2px);
     }
     .calendar-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 4px;
+      gap: 8px;
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      transition: box-shadow 0.3s;
+    }
+    .calendar-grid:hover {
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
     }
     .day-name {
       font-weight: bold;
       text-align: center;
-      background-color: #f0f0f0;
-      padding: 6px;
+      background-color: #ecf0f1;
+      padding: 10px;
+      border-radius: 5px;
+      color: #34495e;
     }
     .day {
-      height: 70px;
-      padding: 6px;
+      height: 80px;
+      padding: 10px;
       text-align: right;
-      border: 1px solid #ddd;
+      border: 1px solid #e0e0e0;
+      border-radius: 5px;
+      transition: transform 0.2s, background-color 0.3s;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-end;
+    }
+    .day:hover {
+      transform: scale(1.05);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
     .occupato {
-      background-color: #f6c6c6;
+      background-color: #e74c3c; /* Rosso per occupato */
+      color: white;
     }
     .libero {
-      background-color: #c6f6c6;
+      background-color: #2ecc71; /* Verde per libero */
+      color: white;
     }
     .vuoto {
       background-color: #f9f9f9;
+      border: none;
     }
     .mese {
-      margin-top: 40px;
+      margin-top: 50px;
     }
     .mese h3 {
       text-align: center;
-      margin-bottom: 10px;
+      margin-bottom: 20px;
+      font-size: 1.5em;
+      color: #2980b9;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
-    button {
-      padding: 6px 12px;
-      margin: 0 10px;
+    /* Effetto Grok: Aggiunta di un tocco divertente e unico */
+    .grok-effect {
+      text-align: center;
+      margin-top: 40px;
+      font-style: italic;
+      color: #7f8c8d;
+      animation: grok-pulse 2s infinite;
+    }
+    @keyframes grok-pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.7; }
+      100% { opacity: 1; }
     }
   </style>
 </head>
 <body>
 
-<h2>Disponibilità camere</h2>
+<h2>Serendipity Casa Vacanze - disponibilità</h2>
 <div class="calendar-nav">
   <button onclick="cambiaMese(-1)">⬅️ Mese precedente</button>
   <button onclick="cambiaMese(1)">Mese successivo ➡️</button>
 </div>
 <div id="calendari"></div>
+<div class="grok-effect">Serendipity vi augura di trascorrere un buon soggiorno a Torino</div>
 
 <script>
   const urlCSV = "https://docs.google.com/spreadsheets/d/1y1zN6TsGKDHXr7fdOCkbH3IXMouSuefamQvHtpxASOw/gviz/tq?tqx=out:csv";
@@ -90,14 +147,17 @@
     const meseNome = new Date(anno, mese).toLocaleString('it-IT', { month: 'long' });
     const titolo = `${meseNome.charAt(0).toUpperCase() + meseNome.slice(1)} ${anno}`;
 
-    const primoGiorno = new Date(anno, mese, 1).getDay();
-    const giorniNelMese = new Date(anno, mese + 1, 0).getDate();
+    const wrapper = document.createElement("div");
+    wrapper.className = "mese";
+
+    const h3 = document.createElement("h3");
+    h3.textContent = titolo;
+    wrapper.appendChild(h3);
 
     const griglia = document.createElement("div");
-    griglia.className = "calendar-grid mese";
-    griglia.innerHTML = `<h3>${titolo}</h3>`;
+    griglia.className = "calendar-grid";
 
-    const giorniSettimana = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
+    const giorniSettimana = ['Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab'];
     for (let g of giorniSettimana) {
       const el = document.createElement("div");
       el.className = "day-name";
@@ -105,16 +165,16 @@
       griglia.appendChild(el);
     }
 
-    let offset = (new Date(anno, mese, 1).getDay() + 6) % 7;
+    let offset = new Date(anno, mese, 1).getDay(); // Offset per settimane che iniziano da Domenica
     for (let i = 0; i < offset; i++) {
       const vuoto = document.createElement("div");
       vuoto.className = "day vuoto";
       griglia.appendChild(vuoto);
     }
 
-    for (let giorno = 1; giorno <= giorniNelMese; giorno++) {
+    for (let giorno = 1; giorno <= new Date(anno, mese + 1, 0).getDate(); giorno++) {
       const data = `${anno}-${String(mese + 1).padStart(2, '0')}-${String(giorno).padStart(2, '0')}`;
-      const stato = disponibilita[data] || "";
+      const stato = disponibilita[data] || "libero"; // Default a libero se non specificato
       const cella = document.createElement("div");
       cella.className = "day";
       if (stato === "libero") cella.classList.add("libero");
@@ -123,7 +183,8 @@
       griglia.appendChild(cella);
     }
 
-    return griglia;
+    wrapper.appendChild(griglia);
+    return wrapper;
   }
 
   function mostraCalendari() {

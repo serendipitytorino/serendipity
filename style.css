@@ -33,7 +33,7 @@
 }
 
 .nav-links a {
-    color: var(--white);
+    color: #FFFFFF;
     text-decoration: none;
     font-weight: bold;
     transition: color 0.3s;
@@ -189,7 +189,7 @@ body.modal-open {
 }
 
 .hero-content {
-    padding: 2rem;
+    padding: 1rem 2rem 2rem;
     background: rgba(0, 0, 0, 0.6); /* Increased opacity for better readability */
     backdrop-filter: blur(5px); /* Added blur for improved text contrast */
     border-radius: 12px;
@@ -204,10 +204,17 @@ body.modal-open {
     color: #FFFFFF;
 }
 
+.hero-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    color: #FFFFFF; 
+}
+
 .hero-section p {
     font-size: 1.2rem;
     max-width: 600px;
     color: #FFFFFF;
+    margin-bottom: 2rem; /* Added space */
 }
 
 .scroll-down {
@@ -419,11 +426,42 @@ body.modal-open {
     line-height: 44px;
 }
 
-.close-btn:hover, .close-btn:focus {
-    color: #bbb;
-    text-decoration: none;
-    cursor: pointer;
+.close-btn:focus {
+    color: var(--dark-text);
+    }
 }
+
+.opening-info {
+    text-align: center;
+    margin-top: 3rem;
+}
+
+.opening-text-it, .opening-text-en {
+    font-size: 0.9rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.email-button {
+    display: block;
+    margin: 1rem auto 0 auto;
+    padding: 0.8rem 1.5rem;
+    background-color: var(--primary-color);
+    color: var(--white);
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.3s;
+    width: fit-content;
+}
+
+.email-button:hover {
+    background-color: var(--gold);
+    transform: translateY(-3px);
+}
+
+
+
 
 .prev-btn, .next-btn {
     cursor: pointer;
@@ -520,9 +558,7 @@ body.modal-open {
     }
 }
 
-.hero-cta-button {
-    margin-bottom: 1.5rem;
-}
+
 
 .cta-button-red {
     background-color: #dc3545;
@@ -859,6 +895,10 @@ a:focus-visible, button:focus-visible {
     grid-template-columns: 1fr; /* Mobile-first: single column */
 }
 
+#prices .card {
+    grid-column: 1 / -1;
+}
+
 /* Per la sezione servizi con 2 cards */
 #services .grid {
     grid-template-columns: 1fr; /* Mobile-first: single column */
@@ -898,6 +938,7 @@ a:focus-visible, button:focus-visible {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 400px;
+    margin-bottom: 2rem;
 }
 
 #login-form h2 {
