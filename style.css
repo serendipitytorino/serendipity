@@ -890,13 +890,17 @@ a:focus-visible, button:focus-visible {
     margin: 0 auto;
 }
 
-/* Per la sezione prezzi che ha solo 2 cards */
-#prices .grid {
-    grid-template-columns: 1fr; /* Mobile-first: single column */
+/* Per le sezioni con una card singola da centrare */
+#prices .grid-centered .card,
+#location .grid-centered .card {
+    grid-column: 1 / -1; /* Occupa tutto lo spazio del grid container */
 }
 
-#prices .card {
-    grid-column: 1 / -1;
+@media (min-width: 768px) {
+    #prices .grid-centered,
+    #location .grid-centered {
+        grid-template-columns: 1fr; /* Mantiene una colonna singola anche su schermi più grandi */
+    }
 }
 
 /* Per la sezione servizi con 2 cards */

@@ -7,8 +7,8 @@
   <style>
     body {
       font-family: 'Roboto', sans-serif;
-      padding: 40px;
-      max-width: 900px;
+      padding: 20px;
+      max-width: 600px; /* Ridotto da 900px */
       margin: auto;
       background-color: #f4f7fa;
       color: #333;
@@ -60,8 +60,8 @@
       color: #34495e;
     }
     .day {
-      height: 80px;
-      padding: 10px;
+      height: 50px; /* Ridotto da 80px */
+      padding: 5px; /* Ridotto da 10px */
       text-align: right;
       border: 1px solid #e0e0e0;
       border-radius: 5px;
@@ -135,11 +135,17 @@
         const righe = text.trim().split("\n").slice(1); // salta intestazione
         righe.forEach(riga => {
           const [data, stato] = riga.split(",");
-          const [gg, mm, aaaa] = data.trim().split("/"); // formato DD/MM/YYYY
-          const dataISO = `${aaaa}-${mm.padStart(2, "0")}-${gg.padStart(2, "0")}`;
-          disponibilita[dataISO] = stato.trim().toLowerCase();
+          if (data && stato) { // Aggiunto controllo per righe vuote
+            const [gg, mm, aaaa] = data.trim().split("/"); // formato DD/MM/YYYY
+            const dataISO = `${aaaa}-${mm.padStart(2, "0")}-${gg.padStart(2, "0")}`;
+            disponibilita[dataISO] = stato.trim().toLowerCase();
+          }
         });
         callback();
+      })
+      .catch(error => {
+        console.error("Impossibile caricare i dati di disponibilità. Il calendario verrà mostrato comunque.", error);
+        callback(); // Mostra il calendario anche in caso di errore
       });
   }
 
