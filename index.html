@@ -34,7 +34,7 @@
             <h1>Serendipity</h1>
             <h2><span data-lang="it">Casa Vacanze</span><span data-lang="en">Holiday Home</span></h2>
             <p><span data-lang="it">Via Mombarcaro 47, 10136 Torino</span><span data-lang="en">Via Mombarcaro 47, 10136 Turin</span></p>
-            <a href="calendario.html" class="cta-button hero-cta-button cta-button-red"><span data-lang="it">Verifica disponibilità</span><span data-lang="en">Check availability</span></a>
+            <a href="#booking" class="cta-button hero-cta-button cta-button-red"><span data-lang="it">Verifica disponibilità</span><span data-lang="en">Check availability</span></a>
         </div>
         <a href="#intro" class="scroll-down">
     <span data-lang="it">&#8595;</span>
@@ -325,7 +325,18 @@
                     <span data-lang="it">Vivi un'esperienza unica a Torino. Controlla la disponibilità e prenota ora la tua vacanza da sogno.</span>
                     <span data-lang="en">Live a unique experience in Turin. Check availability and book your dream vacation now.</span>
                 </p>
+                <div class="calendar-nav">
+                  <button onclick="cambiaMese(-1)">⬅️ Mese precedente</button>
+                  <button onclick="cambiaMese(1)">Mese successivo ➡️</button>
+                </div>
+                <div id="calendari-container"></div>
                 <div class="cta-buttons-grid">
+                    <div class="cta-row">
+                        <a href="#" class="cta-button cta-button-red">
+                            <span data-lang="it">Prenota Direttamente</span>
+                            <span data-lang="en">Book Directly</span>
+                        </a>
+                    </div>
                     <div class="cta-row">
                         <a href="#" class="cta-button">
                             <span data-lang="it">Prenota su Airbnb</span>
@@ -334,19 +345,6 @@
                         <a href="#" class="cta-button">
                             <span data-lang="it">Prenota su Booking</span>
                             <span data-lang="en">Book on Booking</span>
-                        </a>
-                    </div>
-                    <div class="cta-row">
-                        
-                        <a href="#" class="cta-button">
-                            <span data-lang="it">Prenota Direttamente</span>
-                            <span data-lang="en">Book Directly</span>
-                        </a>
-                    </div>
-                    <div class="cta-row">
-                        <a href="calendario.html" class="cta-button cta-button-red">
-                            <span data-lang="it">Verifica disponibilità</span>
-                            <span data-lang="en">Check availability</span>
                         </a>
                     </div>
                 </div>
@@ -502,7 +500,7 @@
                 const username = document.getElementById('username').value;
                 const password = document.getElementById('password').value;
 
-                if (username === 'daniela' && password === 'daniela') {
+                if (username === 'daniela' && password === 'dan9812') {
                     alert('Login effettuato con successo!');
                     loginModal.style.display = 'none';
                     document.body.classList.remove('modal-open');
@@ -512,6 +510,104 @@
                 }
             });
         });
+    </script>
+    <script>
+        const urlCSV = "https://docs.google.com/spreadsheets/d/1y1zN6TsGKDHXr7fdOCkbH3IXMouSuefamQvHtpxASOw/gviz/tq?tqx=out:csv";
+        let disponibilita = {};
+        let meseCorrente = new Date().getMonth();
+        let annoCorrente = new Date().getFullYear();
+
+        function caricaDati(callback) {
+            fetch(urlCSV)
+            .then(r => r.text())
+            .then(text => {
+                const righe = text.trim().split("\n").slice(1); // salta intestazione
+                righe.forEach(riga => {
+                    const [data, stato] = riga.split(",");
+                    if (data && stato) { // Aggiunto controllo per righe vuote
+                        const [gg, mm, aaaa] = data.trim().split("/"); // formato DD/MM/YYYY
+                        const dataISO = `${aaaa}-${mm.padStart(2, "0")}-${gg.padStart(2, "0")}`;
+                        disponibilita[dataISO] = stato.trim().toLowerCase();
+                    }
+                });
+                callback();
+            })
+            .catch(error => {
+                console.error("Impossibile caricare i dati di disponibilità. Il calendario verrà mostrato comunque.", error);
+                callback(); // Mostra il calendario anche in caso di errore
+            });
+        }
+
+        function generaCalendario(mese, anno) {
+            const meseNome = new Date(anno, mese).toLocaleString('it-IT', { month: 'long' });
+            const titolo = `${meseNome.charAt(0).toUpperCase() + meseNome.slice(1)} ${anno}`;
+
+            const wrapper = document.createElement("div");
+            wrapper.className = "mese";
+
+            const h3 = document.createElement("h3");
+            h3.textContent = titolo;
+            wrapper.appendChild(h3);
+
+            const griglia = document.createElement("div");
+            griglia.className = "calendar-grid";
+
+            const giorniSettimana = ['Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab'];
+            for (let g of giorniSettimana) {
+                const el = document.createElement("div");
+                el.className = "day-name";
+                el.textContent = g;
+                griglia.appendChild(el);
+            }
+
+            let offset = new Date(anno, mese, 1).getDay(); // Offset per settimane che iniziano da Domenica
+            for (let i = 0; i < offset; i++) {
+                const vuoto = document.createElement("div");
+                vuoto.className = "day vuoto";
+                griglia.appendChild(vuoto);
+            }
+
+            for (let giorno = 1; giorno <= new Date(anno, mese + 1, 0).getDate(); giorno++) {
+                const data = `${anno}-${String(mese + 1).padStart(2, '0')}-${String(giorno).padStart(2, '0')}`;
+                const stato = disponibilita[data] || "libero"; // Default a libero se non specificato
+                const cella = document.createElement("div");
+                cella.className = "day";
+                if (stato === "libero") cella.classList.add("libero");
+                if (stato === "occupato") cella.classList.add("occupato");
+                cella.innerHTML = `<small>${giorno}</small>`;
+                griglia.appendChild(cella);
+            }
+
+            wrapper.appendChild(griglia);
+            return wrapper;
+        }
+
+        function mostraCalendari() {
+            const contenitore = document.getElementById("calendari-container");
+            contenitore.innerHTML = "";
+            contenitore.appendChild(generaCalendario(meseCorrente, annoCorrente));
+            let mese2 = meseCorrente + 1;
+            let anno2 = annoCorrente;
+            if (mese2 > 11) {
+                mese2 = 0;
+                anno2++;
+            }
+            contenitore.appendChild(generaCalendario(mese2, anno2));
+        }
+
+        function cambiaMese(delta) {
+            meseCorrente += delta;
+            if (meseCorrente > 11) {
+                meseCorrente = 0;
+                annoCorrente++;
+            } else if (meseCorrente < 0) {
+                meseCorrente = 11;
+                annoCorrente--;
+            }
+            mostraCalendari();
+        }
+
+        caricaDati(mostraCalendari);
     </script>
 
 </body>
