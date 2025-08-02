@@ -1,7 +1,7 @@
-.main-nav { background-color: rgba(255,255,255,0.9); position: sticky; top: 0; z-index: 100; padding: 10px 20px; }
-.nav-links li a { color: var(--text-dark); font-weight: 700; transition: color 0.3s; }
-.nav-links li a:hover { color: var(--primary); }
-.hamburger .bar { background-color: var(--text-dark); }
+.main-nav { background-color: rgba(44, 62, 80, 0.9); position: sticky; top: 0; z-index: 100; padding: 10px 20px; }
+.nav-links li a { color: #FFFFFF; font-weight: 700; transition: color 0.3s; }
+.nav-links li a:hover { color: var(--gold); }
+.hamburger .bar { background-color: #FFFFFF; }
 
 /* --- Navigation --- */
 .main-nav {
@@ -104,6 +104,7 @@
     --light-gray: #EDEDED; /* Grigio chiaro per alternanze */
     --occupied: #E74C3C; /* Rosso per occupato */
     --selected: #FFD700; /* Giallo per date selezionate */
+    --gold: #FFD700;
 }
 
 .day.selected, .calendar-updated .day.selected {
@@ -309,15 +310,12 @@ body.modal-open {
     text-align: center;
     margin-bottom: 3rem;
     position: relative;
+    border-bottom: 2px solid rgba(44, 62, 80, 0.9); /* Full-width line with header color */
+    padding-bottom: 10px;
 }
 
 .section-title::after {
-    content: '';
-    display: block;
-    width: 60px;
-    height: 3px;
-    background-color: var(--gold);
-    margin: 0.5rem auto 0;
+    content: none; /* Remove the short line */
 }
 
 /* --- Intro Section --- */
@@ -344,7 +342,7 @@ body.modal-open {
     background: var(--white);
     border-radius: 10px;
     padding: 1.75rem;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     border-top: 4px solid var(--primary-color);
     height: 100%; /* Ensure equal height */
@@ -512,6 +510,7 @@ body.modal-open {
     font-weight: bold;
     transition: background-color 0.3s, transform 0.3s;
     width: fit-content;
+    border: 2px solid var(--text-dark);
 }
 
 .email-button:hover {
@@ -1011,7 +1010,7 @@ a:focus-visible, button:focus-visible {
 }
 
 #login-form {
-    background: var(--white);
+    background: #2C3E50;
     padding: 2rem;
     border-radius: 10px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -1023,7 +1022,7 @@ a:focus-visible, button:focus-visible {
 #login-form h2 {
     text-align: center;
     margin-bottom: 1.5rem;
-    color: var(--primary-color);
+    color: #FFFFFF;
 }
 
 .input-group {
@@ -1033,7 +1032,7 @@ a:focus-visible, button:focus-visible {
 .input-group label {
     display: block;
     margin-bottom: 0.5rem;
-    color: var(--text-color);
+    color: #FFFFFF;
 }
 
 .input-group input {
@@ -1041,13 +1040,15 @@ a:focus-visible, button:focus-visible {
     padding: 0.75rem;
     border: 1px solid #ccc;
     border-radius: 5px;
+    background-color: #FFFFFF;
+    color: #2C3E50;
 }
 
 #login-form button {
     width: 100%;
     padding: 0.75rem;
-    background-color: var(--primary-color);
-    color: var(--white);
+    background-color: var(--gold);
+    color: var(--text-dark);
     border: none;
     border-radius: 5px;
     cursor: pointer;
