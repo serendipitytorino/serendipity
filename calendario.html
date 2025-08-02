@@ -3,123 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <title>Calendario disponibilità</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Roboto', sans-serif;
-      padding: 20px;
-      max-width: 600px; /* Ridotto da 900px */
-      margin: auto;
-      background-color: #f4f7fa;
-      color: #333;
-    }
-    h2 {
-      text-align: center;
-      font-size: 2em;
-      margin-bottom: 30px;
-      color: #2c3e50;
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-    }
-    .calendar-nav {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-    .calendar-nav button {
-      padding: 10px 20px;
-      margin: 0 15px;
-      background-color: #3498db;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s, transform 0.2s;
-    }
-    .calendar-nav button:hover {
-      background-color: #2980b9;
-      transform: translateY(-2px);
-    }
-    .calendar-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 8px;
-      background-color: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      transition: box-shadow 0.3s;
-    }
-    .calendar-grid:hover {
-      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-    }
-    .day-name {
-      font-weight: bold;
-      text-align: center;
-      background-color: #ecf0f1;
-      padding: 10px;
-      border-radius: 5px;
-      color: #34495e;
-    }
-    .day {
-      height: 50px; /* Ridotto da 80px */
-      padding: 5px; /* Ridotto da 10px */
-      text-align: right;
-      border: 1px solid #e0e0e0;
-      border-radius: 5px;
-      transition: transform 0.2s, background-color 0.3s;
-      display: flex;
-      align-items: flex-end;
-      justify-content: flex-end;
-    }
-    .day:hover {
-      transform: scale(1.05);
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    .occupato {
-      background-color: #e74c3c; /* Rosso per occupato */
-      color: white;
-    }
-    .libero {
-      background-color: #2ecc71; /* Verde per libero */
-      color: white;
-    }
-    .vuoto {
-      background-color: #f9f9f9;
-      border: none;
-    }
-    .mese {
-      margin-top: 50px;
-    }
-    .mese h3 {
-      text-align: center;
-      margin-bottom: 20px;
-      font-size: 1.5em;
-      color: #2980b9;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-    /* Effetto Grok: Aggiunta di un tocco divertente e unico */
-    .grok-effect {
-      text-align: center;
-      margin-top: 40px;
-      font-style: italic;
-      color: #7f8c8d;
-      animation: grok-pulse 2s infinite;
-    }
-    @keyframes grok-pulse {
-      0% { opacity: 1; }
-      50% { opacity: 0.7; }
-      100% { opacity: 1; }
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <h2>Serendipity Casa Vacanze - disponibilità</h2>
 <div class="calendar-nav">
-  <button onclick="cambiaMese(-1)">⬅️ Mese precedente</button>
-  <button onclick="cambiaMese(1)">Mese successivo ➡️</button>
+  <button onclick="cambiaMese(-1)">⬅️ MESE PRECEDENTE</button>
+  <button onclick="cambiaMese(1)">MESE SUCCESSIVO ➡️</button>
 </div>
-<div id="calendari"></div>
+<div id="calendari" class="calendar-updated"></div>
+<button onclick="generaEmail()" class="cta-button cta-button-red">
+    <span data-lang="it">Prenota Direttamente</span>
+    <span data-lang="en">Book Directly</span>
+</button>
+<div class="legend"><span style="color: var(--primary);">Verde: Libero</span> | <span style="color: var(--occupied);">Rosso: Occupato</span></div>
 <div class="grok-effect">Serendipity vi augura di trascorrere un buon soggiorno a Torino</div>
 
 <script>
@@ -127,6 +25,8 @@
   let disponibilita = {};
   let meseCorrente = new Date().getMonth();
   let annoCorrente = new Date().getFullYear();
+  let dateSelezionate = [];
+  const emailProprietario = 'serendipityholidayhome.torino@gmail.com';
 
   function caricaDati(callback) {
     fetch(urlCSV)
@@ -178,14 +78,35 @@
       griglia.appendChild(vuoto);
     }
 
+    const oggi = new Date().toISOString().split('T')[0]; // Data attuale in ISO
+
     for (let giorno = 1; giorno <= new Date(anno, mese + 1, 0).getDate(); giorno++) {
       const data = `${anno}-${String(mese + 1).padStart(2, '0')}-${String(giorno).padStart(2, '0')}`;
       const stato = disponibilita[data] || "libero"; // Default a libero se non specificato
       const cella = document.createElement("div");
       cella.className = "day";
+      cella.dataset.data = data; // Salva la data ISO per facile accesso
       if (stato === "libero") cella.classList.add("libero");
       if (stato === "occupato") cella.classList.add("occupato");
       cella.innerHTML = `<small>${giorno}</small>`;
+
+      // Aggiungi onclick solo se libero e non passata
+      if (stato === "libero" && data >= oggi) {
+        cella.onclick = function() {
+          this.classList.toggle('selected');
+          if (this.classList.contains('selected')) {
+            dateSelezionate.push(data);
+          } else {
+            dateSelezionate = dateSelezionate.filter(d => d !== data);
+          }
+        };
+      }
+
+      // Riapplica selected se è nell'array
+      if (dateSelezionate.includes(data)) {
+        cella.classList.add('selected');
+      }
+
       griglia.appendChild(cella);
     }
 
@@ -218,7 +139,46 @@
     mostraCalendari();
   }
 
+  function generaEmail() {
+    if (dateSelezionate.length === 0) {
+        alert('Seleziona almeno una data libera.');
+        return;
+    }
+
+    // Ordina le date
+    dateSelezionate.sort();
+
+    const lang = document.documentElement.lang || 'it';
+    const subject = lang === 'it' ? 'Interesse per prenotazione Serendipity' : 'Interest in booking Serendipity';
+    const body = lang === 'it'
+        ? `Buongiorno,
+vorrei prenotare la vostra struttura per le seguenti date (anno-mese-giorno): ${dateSelezionate.join(', ')}.
+Attendo una vostra comunicazione di conferma ed il link per il pagamento tramite carta di credito.`
+        : `Hello, I am interested in booking for the following dates: ${dateSelezionate.join(', ')}. Contact me for confirmation and payment.`;
+
+    const mailto = `mailto:${emailProprietario}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailto;
+  }
+
   caricaDati(mostraCalendari);
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const langItBtn = document.getElementById('lang-it');
+    const langEnBtn = document.getElementById('lang-en');
+
+    function setLanguage(lang) {
+        document.documentElement.lang = lang;
+        langItBtn.classList.toggle('active', lang === 'it');
+        langEnBtn.classList.toggle('active', lang === 'en');
+        mostraCalendari(); // Redraw calendar with new language
+    }
+
+    langItBtn.addEventListener('click', () => setLanguage('it'));
+    langEnBtn.addEventListener('click', () => setLanguage('en'));
+
+    // Set initial language based on the HTML lang attribute
+    setLanguage(document.documentElement.lang);
+  });
 </script>
 
 </body>
