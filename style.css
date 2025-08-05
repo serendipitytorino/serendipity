@@ -1194,6 +1194,25 @@ a:focus-visible, button:focus-visible {
     border: none;
 }
 
+/* --- Privacy & Cookie Policy --- */
+.privacy-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    padding: 8rem 2rem 2rem 2rem;
+}
+
+.privacy-column {
+    flex: 1;
+    min-width: 300px;
+}
+
+@media (max-width: 768px) {
+    .privacy-container {
+        flex-direction: column;
+    }
+}
+
 .mese h3 {
     text-align: center;
     margin-bottom: 1rem;
