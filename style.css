@@ -31,7 +31,8 @@
     /* Centered nav links */
     align-items: center;
     padding: 1rem 2rem;
-    z-index: 1001;
+    /* Keep nav above the overlay so links stay clickable on mobile */
+    z-index: 2500;
 }
 
 .logo {
@@ -88,6 +89,17 @@
 }
 
 @media (max-width: 768px) {
+    .main-nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        min-height: 90px;
+        padding: 1.5rem 2rem;
+        background-position: center;
+        background-size: cover;
+    }
+
     .nav-links {
         position: fixed;
         top: 0;
@@ -143,6 +155,8 @@
 
     .hamburger {
         display: block;
+        top: 50%;
+        transform: translateY(-50%);
         z-index: 2001;
         /* Above drawer */
     }
@@ -150,9 +164,8 @@
     .logo {
         position: absolute;
         left: 20px;
-        top: 20px;
-        transform: none;
-        /* Remove centering transform */
+        top: 50%;
+        transform: translateY(-50%);
     }
 
     .logo img {
@@ -169,7 +182,7 @@
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.6);
-    z-index: 1500;
+    z-index: 2000;
     /* Below nav, above content */
     opacity: 0;
     visibility: hidden;
@@ -359,12 +372,15 @@ h3,
 /* --- Mobile Fixes --- */
 @media (max-width: 768px) {
     .language-selector {
-        top: 15px;
+        top: 20px;
+        /* Aligned with Logo (20px) and Hamburger (25px) */
         right: 50%;
         transform: translateX(50%);
         border-radius: 20px;
         padding: 5px 15px;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        z-index: 2002;
+        /* Ensure above other elements */
     }
 
     .hamburger {
@@ -387,13 +403,34 @@ h3,
     }
 
     .nav-links {
-        padding-top: 80px;
-        /* Space for close button */
+        padding-top: 120px;
+        /* Increased space for close button and language selector */
+        justify-content: flex-start;
+        /* Align items to top */
     }
 
     .hero-content {
-        margin-top: 60px;
-        /* Push down to avoid covering nav */
+        margin-top: 140px;
+        /* Push down to avoid covering nav and selector */
+    }
+
+    /* Policy/Cookie pages: taller nav bar on mobile */
+    .page-header {
+        position: relative;
+        min-height: 90px;
+    }
+
+    .page-header .main-nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        min-height: 90px;
+        padding: 1.5rem 2rem;
+    }
+
+    .page-header + main {
+        padding-top: 110px;
     }
 }
 
@@ -1735,5 +1772,47 @@ button:focus-visible {
 
     #cookie-banner {
         padding: 1.5rem;
+    }
+}
+
+/* --- Mobile Fixes (FINAL OVERRIDE) --- */
+@media (max-width: 768px) {
+    .language-selector {
+        top: 20px !important;
+        left: 50% !important;
+        right: auto !important;
+        transform: translateX(-50%) !important;
+        position: fixed !important;
+        z-index: 2600 !important;
+        /* Lower than nav-overlay (1500) and nav-links (2000) */
+        background-color: rgba(255, 255, 255, 0.9);
+        display: block !important;
+        width: max-content !important;
+        /* Ensure it fits content */
+        border-radius: 20px;
+        padding: 5px 15px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .nav-links {
+        justify-content: flex-start !important;
+        padding-top: 120px !important;
+        background-color: #2C3E50 !important;
+        /* Force solid background */
+        opacity: 1 !important;
+    }
+
+    .hero-content {
+        margin-top: 140px !important;
+    }
+
+    /* Keep policy/cookie header consistent with taller mobile nav */
+    .page-header .main-nav {
+        min-height: 90px;
+        padding: 1.5rem 2rem;
+    }
+
+    .page-header + main {
+        padding-top: 110px;
     }
 }
