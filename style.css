@@ -1778,11 +1778,11 @@ button:focus-visible {
 /* --- Mobile Fixes (FINAL OVERRIDE) --- */
 @media (max-width: 768px) {
     .language-selector {
-        top: 20px !important;
-        left: 50% !important;
-        right: auto !important;
-        transform: translateX(-50%) !important;
-        position: fixed !important;
+        top: 50% !important;
+        right: 70px !important;
+        left: auto !important;
+        transform: translateY(-50%) !important;
+        position: absolute !important;
         z-index: 2600 !important;
         /* Lower than nav-overlay (1500) and nav-links (2000) */
         background-color: rgba(255, 255, 255, 0.9);
@@ -1790,8 +1790,20 @@ button:focus-visible {
         width: max-content !important;
         /* Ensure it fits content */
         border-radius: 20px;
-        padding: 5px 15px;
+        padding: 3px 8px;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .language-selector button {
+        padding: 6px 10px !important;
+        min-width: 32px !important;
+        min-height: 32px !important;
+        font-size: 0.8rem !important;
+    }
+
+    .hamburger {
+        top: 50% !important;
+        transform: translateY(-50%) !important;
     }
 
     .nav-links {
