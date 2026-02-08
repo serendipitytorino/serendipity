@@ -1,185 +1,344 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
   <meta charset="UTF-8">
-  <title>Calendario disponibilità</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Disponibilità - Serendipity</title>
+  <link rel="icon" type="image/png" href="IMAGES/favicon.png">
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+  <!-- --- Language Selector --- -->
+  <div class="language-selector">
+    <button id="lang-it" class="active">IT</button>
+    <button id="lang-en">EN</button>
+  </div>
 
-<h2>Serendipity Casa Vacanze - disponibilità</h2>
-<div class="calendar-nav">
-  <button onclick="cambiaMese(-1)">⬅️ MESE PRECEDENTE</button>
-  <button onclick="cambiaMese(1)">MESE SUCCESSIVO ➡️</button>
-</div>
-<div id="calendari" class="calendar-updated"></div>
-<button onclick="generaEmail()" class="cta-button cta-button-red">
-    <span data-lang="it">Prenota Direttamente</span>
-    <span data-lang="en">Book Directly</span>
-</button>
-<div class="legend"><span style="color: var(--primary);">Verde: Libero</span> | <span style="color: var(--occupied);">Rosso: Occupato</span></div>
-<div class="grok-effect">Serendipity vi augura di trascorrere un buon soggiorno a Torino</div>
+  <!-- --- Header --- -->
+  <header class="page-header">
+    <nav class="main-nav">
+      <div class="logo"><a href="index.html"><img src="IMAGES/logo_serendipity.png" alt="Serendipity Logo"></a></div>
+      <ul class="nav-links">
+        <li><a href="index.html">HOME</a></li>
+        <li><a href="explore.html">EXPLORE</a></li>
+      </ul>
+      <div class="hamburger">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </div>
+    </nav>
+  </header>
 
-<script>
-  const urlCSV = "https://docs.google.com/spreadsheets/d/1y1zN6TsGKDHXr7fdOCkbH3IXMouSuefamQvHtpxASOw/gviz/tq?tqx=out:csv";
-  let disponibilita = {};
-  let meseCorrente = new Date().getMonth();
-  let annoCorrente = new Date().getFullYear();
-  let dateSelezionate = [];
-  const emailProprietario = 'serendipityholidayhome.torino@gmail.com';
+  <h2>Serendipity Casa Vacanze - disponibilità</h2>
+  <div class="calendar-nav">
+    <button onclick="cambiaMese(-1)" aria-label="Mese precedente"><i class="fas fa-chevron-left"></i></button>
+    <button onclick="cambiaMese(1)" aria-label="Mese successivo"><i class="fas fa-chevron-right"></i></button>
+  </div>
+  <main class="calendar-page">
+    <section class="section">
+      <h2 class="section-title">
+        <span data-lang="it">Disponibilità</span>
+        <span data-lang="en">Availability</span>
+      </h2>
+      <div id="calendari" class="calendar-updated calendar-stack"></div>
+      <!-- Nuova riga per il bottone -->
+      <div class="cta-row" style="margin-top: 2rem; text-align: center;">
+        <button onclick="generaEmail()" class="cta-button cta-button-red" id="btn-prenota" disabled>
+          <span data-lang="it">Prenota le date selezionate</span>
+          <span data-lang="en">Book selected dates</span>
+        </button>
+      </div>
+    </section>
+  </main>
 
-  function caricaDati(callback) {
-    fetch(urlCSV)
-      .then(r => r.text())
-      .then(text => {
-        const righe = text.trim().split("\n").slice(1); // salta intestazione
-        righe.forEach(riga => {
-          const [data, stato] = riga.split(",");
-          if (data && stato) { // Aggiunto controllo per righe vuote
-            const [gg, mm, aaaa] = data.trim().split("/"); // formato DD/MM/YYYY
-            const dataISO = `${aaaa}-${mm.padStart(2, "0")}-${gg.padStart(2, "0")}`;
-            disponibilita[dataISO] = stato.trim().toLowerCase();
-          }
+  <div id="booking-feedback"></div>
+  <div class="legend"><span style="color: var(--primary);">Verde: Libero</span> | <span
+      style="color: var(--occupied);">Rosso: Occupato</span></div>
+  <div class="grok-effect">Serendipity vi augura di trascorrere un buon soggiorno a Torino</div>
+
+  <footer>
+    <div class="container footer-content">
+      <div class="footer-copyright">
+        <p>
+          <span data-lang="it">Serendipity Casa Vacanze &copy; 2026. Tutti i diritti riservati.</span>
+          <span data-lang="en">Serendipity Holiday Home &copy; 2026. All rights reserved.</span>
+        </p>
+        <p class="footer-info">CF GNRLNZ02L12C722B | CIR 00127209054 | CIN: IT001272C28EJX3D2Q</p>
+      </div>
+      <div class="footer-social">
+        <a href="https://www.instagram.com/serendipitycasavacanze" target="_blank" rel="noopener noreferrer"
+          aria-label="Instagram" class="instagram-link">
+          <i class="fab fa-instagram"></i>
+        </a>
+      </div>
+      <div class="footer-policy">
+        <a href="privacy_policy.html"><span data-lang="it">Privacy Policy</span><span data-lang="en">Privacy
+            Policy</span></a>
+        <a href="cookie_policy.html"><span data-lang="it">Cookies Policy</span><span data-lang="en">Cookies
+            Policy</span></a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const urlCSV = "https://docs.google.com/spreadsheets/d/1y1zN6TsGKDHXr7fdOCkbH3IXMouSuefamQvHtpxASOw/gviz/tq?tqx=out:csv";
+    let disponibilita = {};
+    let meseCorrente = new Date().getMonth();
+    let annoCorrente = new Date().getFullYear();
+    let dateSelezionate = [];
+    const emailProprietario = 'serendipityholidayhome.torino@gmail.com';
+
+    function caricaDati(callback) {
+      fetch(urlCSV)
+        .then(r => r.text())
+        .then(text => {
+          const righe = text.trim().split("\n").slice(1); // salta intestazione
+          righe.forEach(riga => {
+            const [data, stato] = riga.split(",");
+            if (data && stato) { // Aggiunto controllo per righe vuote
+              const [gg, mm, aaaa] = data.trim().split("/"); // formato DD/MM/YYYY
+              const dataISO = `${aaaa}-${mm.padStart(2, "0")}-${gg.padStart(2, "0")}`;
+              disponibilita[dataISO] = stato.trim().toLowerCase();
+            }
+          });
+          callback();
+        })
+        .catch(error => {
+          console.error("Impossibile caricare i dati di disponibilità. Il calendario verrà mostrato comunque.", error);
+          callback(); // Mostra il calendario anche in caso di errore
         });
-        callback();
-      })
-      .catch(error => {
-        console.error("Impossibile caricare i dati di disponibilità. Il calendario verrà mostrato comunque.", error);
-        callback(); // Mostra il calendario anche in caso di errore
-      });
-  }
-
-  function generaCalendario(mese, anno) {
-    const meseNome = new Date(anno, mese).toLocaleString('it-IT', { month: 'long' });
-    const titolo = `${meseNome.charAt(0).toUpperCase() + meseNome.slice(1)} ${anno}`;
-
-    const wrapper = document.createElement("div");
-    wrapper.className = "mese";
-
-    const h3 = document.createElement("h3");
-    h3.textContent = titolo;
-    wrapper.appendChild(h3);
-
-    const griglia = document.createElement("div");
-    griglia.className = "calendar-grid";
-
-    const giorniSettimana = ['Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab'];
-    for (let g of giorniSettimana) {
-      const el = document.createElement("div");
-      el.className = "day-name";
-      el.textContent = g;
-      griglia.appendChild(el);
     }
 
-    let offset = new Date(anno, mese, 1).getDay(); // Offset per settimane che iniziano da Domenica
-    for (let i = 0; i < offset; i++) {
-      const vuoto = document.createElement("div");
-      vuoto.className = "day vuoto";
-      griglia.appendChild(vuoto);
-    }
+    function generaCalendario(mese, anno) {
+      const meseNome = new Date(anno, mese).toLocaleString('it-IT', { month: 'long' });
+      const titolo = `${meseNome.charAt(0).toUpperCase() + meseNome.slice(1)} ${anno}`;
 
-    const oggi = new Date().toISOString().split('T')[0]; // Data attuale in ISO
+      const wrapper = document.createElement("div");
+      wrapper.className = "mese";
 
-    for (let giorno = 1; giorno <= new Date(anno, mese + 1, 0).getDate(); giorno++) {
-      const data = `${anno}-${String(mese + 1).padStart(2, '0')}-${String(giorno).padStart(2, '0')}`;
-      const stato = disponibilita[data] || "libero"; // Default a libero se non specificato
-      const cella = document.createElement("div");
-      cella.className = "day";
-      cella.dataset.data = data; // Salva la data ISO per facile accesso
-      if (stato === "libero") cella.classList.add("libero");
-      if (stato === "occupato") cella.classList.add("occupato");
-      cella.innerHTML = `<small>${giorno}</small>`;
+      const h3 = document.createElement("h3");
+      h3.textContent = titolo;
+      wrapper.appendChild(h3);
 
-      // Aggiungi onclick solo se libero e non passata
-      if (stato === "libero" && data >= oggi) {
-        cella.onclick = function() {
-          this.classList.toggle('selected');
-          if (this.classList.contains('selected')) {
-            dateSelezionate.push(data);
-          } else {
-            dateSelezionate = dateSelezionate.filter(d => d !== data);
-          }
-        };
+      const griglia = document.createElement("div");
+      griglia.className = "calendar-grid";
+
+      const giorniSettimana = ['Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab'];
+      for (let g of giorniSettimana) {
+        const el = document.createElement("div");
+        el.className = "day-name";
+        el.textContent = g;
+        griglia.appendChild(el);
       }
 
-      // Riapplica selected se è nell'array
-      if (dateSelezionate.includes(data)) {
-        cella.classList.add('selected');
+      let offset = new Date(anno, mese, 1).getDay(); // Offset per settimane che iniziano da Domenica
+      for (let i = 0; i < offset; i++) {
+        const vuoto = document.createElement("div");
+        vuoto.className = "day vuoto";
+        griglia.appendChild(vuoto);
       }
 
-      griglia.appendChild(cella);
+      const oggi = new Date().toISOString().split('T')[0]; // Data attuale in ISO
+
+      for (let giorno = 1; giorno <= new Date(anno, mese + 1, 0).getDate(); giorno++) {
+        const data = `${anno}-${String(mese + 1).padStart(2, '0')}-${String(giorno).padStart(2, '0')}`;
+        const stato = disponibilita[data] || "libero"; // Default a libero se non specificato
+        const cella = document.createElement("div");
+        cella.className = "day";
+        cella.dataset.data = data; // Salva la data ISO per facile accesso
+        cella.setAttribute('tabindex', '0'); // Accessibility
+        cella.setAttribute('role', 'button');
+        if (stato === "libero") cella.classList.add("libero");
+        if (stato === "occupato") cella.classList.add("occupato");
+
+        // Check for past dates
+        if (data < oggi) {
+          cella.classList.add("passato");
+          cella.classList.remove("libero");
+        }
+
+        cella.innerHTML = `<small>${giorno}</small>`;
+
+        // Aggiungi onclick solo se libero e non passata
+        if (stato === "libero" && data >= oggi) {
+          cella.onclick = function () {
+            this.classList.toggle('selected');
+            if (this.classList.contains('selected')) {
+              dateSelezionate.push(data);
+            } else {
+              dateSelezionate = dateSelezionate.filter(d => d !== data);
+            }
+            updateUI(); // Call updateUI after selection change
+          };
+          // Keyboard support
+          cella.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              this.click();
+            }
+          });
+        }
+
+        // Riapplica selected se è nell'array
+        if (dateSelezionate.includes(data)) {
+          cella.classList.add('selected');
+        }
+
+        griglia.appendChild(cella);
+      }
+
+      wrapper.appendChild(griglia);
+      return wrapper;
     }
 
-    wrapper.appendChild(griglia);
-    return wrapper;
-  }
-
-  function mostraCalendari() {
-    const contenitore = document.getElementById("calendari");
-    contenitore.innerHTML = "";
-    contenitore.appendChild(generaCalendario(meseCorrente, annoCorrente));
-    let mese2 = meseCorrente + 1;
-    let anno2 = annoCorrente;
-    if (mese2 > 11) {
-      mese2 = 0;
-      anno2++;
+    function mostraCalendari() {
+      const contenitore = document.getElementById("calendari");
+      contenitore.innerHTML = "";
+      contenitore.appendChild(generaCalendario(meseCorrente, annoCorrente));
+      let mese2 = meseCorrente + 1;
+      let anno2 = annoCorrente;
+      if (mese2 > 11) {
+        mese2 = 0;
+        anno2++;
+      }
+      contenitore.appendChild(generaCalendario(mese2, anno2));
+      updateUI(); // Call updateUI after calendars are rendered
     }
-    contenitore.appendChild(generaCalendario(mese2, anno2));
-  }
 
-  function cambiaMese(delta) {
-    meseCorrente += delta;
-    if (meseCorrente > 11) {
-      meseCorrente = 0;
-      annoCorrente++;
-    } else if (meseCorrente < 0) {
-      meseCorrente = 11;
-      annoCorrente--;
+    function cambiaMese(delta) {
+      meseCorrente += delta;
+      if (meseCorrente > 11) {
+        meseCorrente = 0;
+        annoCorrente++;
+      } else if (meseCorrente < 0) {
+        meseCorrente = 11;
+        annoCorrente--;
+      }
+      mostraCalendari();
     }
-    mostraCalendari();
-  }
 
-  function generaEmail() {
-    if (dateSelezionate.length === 0) {
+    function generaEmail() {
+      if (dateSelezionate.length === 0) {
         alert('Seleziona almeno una data libera.');
         return;
-    }
+      }
 
-    // Ordina le date
-    dateSelezionate.sort();
+      // Ordina le date
+      dateSelezionate.sort();
 
-    const lang = document.documentElement.lang || 'it';
-    const subject = lang === 'it' ? 'Interesse per prenotazione Serendipity' : 'Interest in booking Serendipity';
-    const body = lang === 'it'
+      // Check for contiguous dates
+      // Convert to timestamps for easy comparison
+      const timestamps = dateSelezionate.map(d => new Date(d).getTime());
+      let isContiguous = true;
+      const oneDay = 24 * 60 * 60 * 1000;
+
+      // Check sorted timestamps
+      for (let i = 0; i < timestamps.length - 1; i++) {
+        if (timestamps[i + 1] - timestamps[i] !== oneDay) {
+          isContiguous = false;
+          break;
+        }
+      }
+
+      const lang = document.documentElement.lang || 'it';
+
+      if (!isContiguous) {
+        const msg = lang === 'it'
+          ? 'Per favore, seleziona date consecutive per il tuo soggiorno.'
+          : 'Please select consecutive dates for your stay.';
+        alert(msg);
+        return;
+      }
+
+      const subject = lang === 'it' ? 'Interesse per prenotazione Serendipity' : 'Interest in booking Serendipity';
+      const body = lang === 'it'
         ? `Buongiorno,
 vorrei prenotare la vostra struttura per le seguenti date (anno-mese-giorno): ${dateSelezionate.join(', ')}.
 Attendo una vostra comunicazione di conferma ed il link per il pagamento tramite carta di credito.`
         : `Hello, I am interested in booking for the following dates: ${dateSelezionate.join(', ')}. Contact me for confirmation and payment.`;
 
-    const mailto = `mailto:${emailProprietario}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    window.location.href = mailto;
-  }
+      const mailto = `mailto:${emailProprietario}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      window.location.href = mailto;
+    }
 
-  caricaDati(mostraCalendari);
+    function updateUI() {
+      const btnPrenota = document.getElementById('btn-prenota');
+      const feedback = document.getElementById('booking-feedback');
+      const lang = document.documentElement.lang || 'it';
 
-  document.addEventListener('DOMContentLoaded', () => {
-    const langItBtn = document.getElementById('lang-it');
-    const langEnBtn = document.getElementById('lang-en');
+      // Update Button State
+      if (dateSelezionate.length > 0) {
+        btnPrenota.disabled = false;
+        btnPrenota.classList.remove('disabled');
+      } else {
+        btnPrenota.disabled = true;
+        btnPrenota.classList.add('disabled');
+      }
 
-    function setLanguage(lang) {
+      // Update Feedback Element
+      if (dateSelezionate.length > 0) {
+        const nightText = lang === 'it' ? 'notte' : 'night';
+        const nightsText = lang === 'it' ? 'notti' : 'nights';
+        const selectedText = lang === 'it' ? 'selezionate' : 'selected';
+
+        let countText = dateSelezionate.length === 1 ? nightText : nightsText;
+        feedback.textContent = `${dateSelezionate.length} ${countText} ${selectedText}`;
+        feedback.classList.add('visible');
+      } else {
+        feedback.textContent = ''; // Clear text when no dates are selected
+        feedback.classList.remove('visible');
+      }
+    }
+
+    // Swipe functionality for Calendar
+    const calendarContainer = document.getElementById('calendari');
+    let calTouchStartX = 0;
+    let calTouchEndX = 0;
+
+    calendarContainer.addEventListener('touchstart', e => {
+      calTouchStartX = e.changedTouches[0].screenX;
+    });
+
+    calendarContainer.addEventListener('touchend', e => {
+      calTouchEndX = e.changedTouches[0].screenX;
+      handleSwipeCalendar();
+    });
+
+    function handleSwipeCalendar() {
+      // Swipe Left -> Next Month
+      if (calTouchEndX < calTouchStartX - 50) {
+        cambiaMese(1);
+      }
+      // Swipe Right -> Prev Month
+      if (calTouchEndX > calTouchStartX + 50) {
+        cambiaMese(-1);
+      }
+    }
+
+    caricaDati(mostraCalendari);
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const langItBtn = document.getElementById('lang-it');
+      const langEnBtn = document.getElementById('lang-en');
+
+      function setLanguage(lang) {
         document.documentElement.lang = lang;
         langItBtn.classList.toggle('active', lang === 'it');
         langEnBtn.classList.toggle('active', lang === 'en');
         mostraCalendari(); // Redraw calendar with new language
-    }
+      }
 
-    langItBtn.addEventListener('click', () => setLanguage('it'));
-    langEnBtn.addEventListener('click', () => setLanguage('en'));
+      langItBtn.addEventListener('click', () => setLanguage('it'));
+      langEnBtn.addEventListener('click', () => setLanguage('en'));
 
-    // Set initial language based on the HTML lang attribute
-    setLanguage(document.documentElement.lang);
-  });
-</script>
+      // Set initial language based on the HTML lang attribute
+      setLanguage(document.documentElement.lang);
+    });
+  </script>
 
 </body>
+
 </html>
