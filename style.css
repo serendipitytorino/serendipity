@@ -146,6 +146,19 @@
         z-index: 2001;
         /* Above drawer */
     }
+
+    .logo {
+        position: absolute;
+        left: 20px;
+        top: 20px;
+        transform: none;
+        /* Remove centering transform */
+    }
+
+    .logo img {
+        height: 40px;
+        /* Slightly smaller on mobile to fit */
+    }
 }
 
 /* Nav Overlay */
@@ -340,6 +353,47 @@ h3,
     /* Ensure map has enough contrast in dark mode */
     .map-container {
         border: 1px solid #444;
+    }
+}
+
+/* --- Mobile Fixes --- */
+@media (max-width: 768px) {
+    .language-selector {
+        top: 15px;
+        right: 50%;
+        transform: translateX(50%);
+        border-radius: 20px;
+        padding: 5px 15px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .hamburger {
+        display: block !important;
+        position: absolute;
+        top: 25px;
+        /* Aligned with logo vertically */
+        right: 20px;
+        z-index: 2001;
+    }
+
+    .hamburger .bar {
+        background-color: #FFFFFF;
+        /* Ensure visibility */
+        height: 3px;
+        width: 25px;
+        margin: 5px auto;
+        display: block;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .nav-links {
+        padding-top: 80px;
+        /* Space for close button */
+    }
+
+    .hero-content {
+        margin-top: 60px;
+        /* Push down to avoid covering nav */
     }
 }
 
