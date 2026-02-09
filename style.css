@@ -214,6 +214,8 @@
     /* Oro Antico */
     --gold: #C5A059;
     /* Oro Antico */
+    --background-color: var(--neutral-bg);
+    --text-color: var(--text-dark);
 }
 
 .day.selected,
@@ -327,47 +329,7 @@ h3,
     font-family: 'Playfair Display', serif;
 }
 
-/* Dark Mode */
-@media (prefers-color-scheme: dark) {
-    :root {
-        --background-color: var(--dark-background);
-        --text-color: var(--dark-text);
-        --light-gray: #2A2A2A;
-        /* Darker gray with better contrast */
-        --white: #2A2A2A;
-        /* Adjust white for dark mode cards */
-        --secondary-color: #333333;
-    }
 
-    .card {
-        background: var(--dark-card-background);
-        box-shadow: 0 10px 30px var(--dark-shadow);
-    }
-
-    .language-selector {
-        background: rgba(40, 40, 40, 0.8);
-        /* Darker background in dark mode */
-    }
-
-    .language-selector button {
-        color: var(--dark-text);
-        background-color: #555555;
-    }
-
-    .language-selector button.active {
-        background-color: var(--primary-color);
-        color: #FFFFFF;
-    }
-
-    .language-selector button:not(.active):hover {
-        background-color: #777777;
-    }
-
-    /* Ensure map has enough contrast in dark mode */
-    .map-container {
-        border: 1px solid #444;
-    }
-}
 
 /* --- Mobile Fixes --- */
 @media (max-width: 768px) {
@@ -429,7 +391,7 @@ h3,
         padding: 1.5rem 2rem;
     }
 
-    .page-header + main {
+    .page-header+main {
         padding-top: 110px;
     }
 }
@@ -1824,7 +1786,7 @@ button:focus-visible {
         padding: 1.5rem 2rem;
     }
 
-    .page-header + main {
+    .page-header+main {
         padding-top: 110px;
     }
 }
