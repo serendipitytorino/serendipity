@@ -753,7 +753,7 @@ Attendo una vostra comunicazione di conferma ed il link per il pagamento tramite
             let slideIndex = 1;
 
             window.openLightbox = function (n) {
-                document.getElementById("lightbox").style.display = "block";
+                document.getElementById("lightbox").style.display = "flex";
                 showSlides(slideIndex = n);
             }
 
@@ -781,7 +781,7 @@ Attendo una vostra comunicazione di conferma ed il link per il pagamento tramite
                 for (i = 0; i < dots.length; i++) {
                     dots[i].className = dots[i].className.replace(" active", "");
                 }
-                slides[slideIndex - 1].style.display = "block";
+                slides[slideIndex - 1].style.display = "flex";
                 if (dots.length > 0 && dots[slideIndex - 1]) {
                     dots[slideIndex - 1].className += " active";
                 }
@@ -793,7 +793,7 @@ Attendo una vostra comunicazione di conferma ed il link per il pagamento tramite
                 if (event.key === "Escape") {
                     closeLightbox();
                 }
-                if (document.getElementById('lightbox').style.display === 'block') {
+                if (document.getElementById('lightbox').style.display === 'flex') {
                     if (event.key === "ArrowLeft") changeSlide(-1);
                     if (event.key === "ArrowRight") changeSlide(1);
                 }

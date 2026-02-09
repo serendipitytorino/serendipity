@@ -721,111 +721,118 @@ body {
 }
 
 /* --- Lightbox --- */
+/* --- Lightbox --- */
 .lightbox-container {
     display: none;
+    /* Hidden by default */
     position: fixed;
     z-index: 9999;
-    padding-top: 60px;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.9);
-    touch-action: manipulation;
-    /* Improve touch device behavior */
+    background-color: rgba(0, 0, 0, 0.85);
+    /* Slightly less opaque for blur */
+    backdrop-filter: blur(10px);
+    /* Frosted glass effect */
+    align-items: center;
+    /* Vertical center */
+    justify-content: center;
+    /* Horizontal center */
+    padding: 20px;
+    /* Safety padding */
 }
 
 .lightbox-content {
     position: relative;
-    margin: auto;
-    width: 90%;
-    max-width: 1200px;
+    max-width: 90%;
+    max-height: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .lightbox-slide {
     display: none;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
 }
 
 .lightbox-slide img {
-    width: 100%;
-    border-radius: 5px;
-    pointer-events: none;
-    /* Disable pointer events on images */
-    max-height: 80vh;
-    /* Limit height on mobile */
+    border-radius: 8px;
+    max-height: 85vh;
+    /* Limit height */
+    max-width: 90vw;
+    /* Limit width */
     object-fit: contain;
-    /* Ensure whole image is visible */
+    /* Ensure full image visible */
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    /* Depth */
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .close-btn {
     position: absolute;
-    top: 15px;
-    right: 35px;
-    color: #f1f1f1;
-    font-size: 40px;
+    top: 20px;
+    right: 20px;
+    color: #fff;
+    font-size: 2rem;
     font-weight: bold;
-    transition: 0.3s;
     cursor: pointer;
-    z-index: 10000;
-    width: 44px;
-    /* Minimum tappable size */
-    height: 44px;
-    text-align: center;
-    line-height: 44px;
+    z-index: 10002;
+    width: 50px;
+    height: 50px;
+    background-color: rgba(255, 255, 255, 0.1);
+    /* Subtle background */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
 }
 
-.close-btn:focus {
-    color: var(--dark-text);
+.close-btn:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: rotate(90deg);
 }
-
-
-.opening-info {
-    text-align: center;
-    margin-top: 3rem;
-}
-
-.opening-text-it,
-.opening-text-en {
-    font-size: 0.9rem;
-    color: #333;
-    margin-bottom: 0.5rem;
-}
-
-/* email-button styles removed to inherit unified CTA style */
-
-
-
 
 .prev-btn,
 .next-btn {
     cursor: pointer;
     position: absolute;
     top: 50%;
-    width: 44px;
-    /* Minimum tappable size */
-    height: 44px;
-    padding: 16px;
-    margin-top: -50px;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
     color: white;
     font-weight: bold;
-    font-size: 20px;
-    transition: 0.6s ease;
-    border-radius: 0 3px 3px 0;
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px);
     user-select: none;
-    -webkit-user-select: none;
-    text-align: center;
-    line-height: 12px;
+    z-index: 10001;
 }
 
 .next-btn {
-    right: 0;
-    border-radius: 3px 0 0 3px;
+    right: 20px;
+}
+
+.prev-btn {
+    left: 20px;
 }
 
 .prev-btn:hover,
 .next-btn:hover {
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-50%) scale(1.1);
 }
 
 .dots-container {
