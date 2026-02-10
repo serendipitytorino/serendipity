@@ -218,6 +218,43 @@
     --text-color: var(--text-dark);
 }
 
+/* Utility Classes */
+.bg-light {
+    background-color: var(--light-gray);
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-muted-small {
+    font-size: 0.9rem;
+    margin-top: -10px;
+    opacity: 0.9;
+}
+
+.booking-desc {
+    max-width: 600px;
+    margin: 0 auto 2rem auto;
+}
+
+.legend-item {
+    font-weight: bold;
+}
+
+.legend-green {
+    color: var(--primary);
+}
+
+.legend-red {
+    color: var(--occupied);
+}
+
+.map-frame {
+    border: 0;
+    min-height: 350px;
+}
+
 .day.selected,
 .calendar-updated .day.selected {
     background-color: var(--selected) !important;
@@ -407,11 +444,11 @@ html {
 }
 
 body {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lato', sans-serif;
     font-size: 16px;
     /* Minimum font-size for mobile */
-    line-height: 1.8;
     /* Increased line-height for better readability */
+    line-height: 1.8;
     background-color: var(--background-color);
     color: var(--text-color);
     overflow-x: hidden;

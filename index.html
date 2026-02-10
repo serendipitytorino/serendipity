@@ -6,6 +6,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description"
         content="Serendipity Casa Vacanze a Torino, nel cuore di Santa Rita. Un'oasi di comfort e design per un soggiorno indimenticabile." />
+
+    <!-- Social Meta Tags -->
+    <meta property="og:title" content="Serendipity Casa Vacanze Torino | Santa Rita" />
+    <meta property="og:description"
+        content="Soggiorna a Serendipity: comfort e design nel cuore di Santa Rita, Torino. Ideale per le ATP Finals 2026." />
+    <meta property="og:image" content="https://www.serendipityhometorino.it/IMAGES/soggiorno_03.webp" />
+    <meta property="og:url" content="https://www.serendipityhometorino.it/" />
+    <meta property="og:type" content="website" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Serendipity Casa Vacanze Torino | Santa Rita" />
+    <meta name="twitter:description"
+        content="Soggiorna a Serendipity: comfort e design nel cuore di Santa Rita, Torino. Ideale per le ATP Finals 2026." />
+    <meta name="twitter:image" content="https://www.serendipityhometorino.it/IMAGES/soggiorno_03.webp" />
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Accommodation",
+      "name": "Serendipity Casa Vacanze Torino",
+      "description": "Accogliente casa vacanze nel quartiere Santa Rita a Torino.",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Via Mombarcaro 47",
+        "addressLocality": "Torino",
+        "postalCode": "10136",
+        "addressCountry": "IT"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 45.0450,
+        "longitude": 7.6430
+      },
+      "amenityFeature": [
+        {"@type": "LocationFeatureSpecification", "name": "WiFi", "value": "true"},
+        {"@type": "LocationFeatureSpecification", "name": "Kitchen", "value": "true"}
+      ],
+      "image": "https://www.serendipityhometorino.it/IMAGES/soggiorno_03.webp",
+      "url": "https://www.serendipityhometorino.it/"
+    }
+    </script>
+
     <title>Serendipity Casa Vacanze Torino</title>
     <link rel="icon" type="image/png" href="IMAGES/favicon.png">
     <link rel="stylesheet" href="style.css" />
@@ -40,7 +84,7 @@
         <div class="hero-content">
             <h1>Serendipity</h1>
             <h2><span data-lang="it">Casa Vacanze</span><span data-lang="en">Holiday Home</span></h2>
-            <p style="font-size: 0.9rem; margin-top: -10px; opacity: 0.9;">CIR: 00127209054 | CIN: IT001272C28EJX3D2Q
+            <p class="text-muted-small">CIR: 00127209054 | CIN: IT001272C28EJX3D2Q
             </p>
             <p><span data-lang="it">Via Mombarcaro 47, 10136 Torino</span><span data-lang="en">Via Mombarcaro 47, 10136
                     Turin</span></p>
@@ -97,7 +141,7 @@
         </section>
 
         <!-- --- Amenities Section --- -->
-        <section id="amenities" class="content-section" style="background-color: var(--light-gray);">
+        <section id="amenities" class="content-section bg-light">
             <div class="container">
                 <h2 class="section-title">
                     <span data-lang="it">Comfort e Dotazioni</span>
@@ -288,8 +332,7 @@
                     <!-- Right Column: Map -->
                     <div class="map-wrapper">
                         <iframe src="https://www.google.com/maps/d/embed?mid=1jvb2a5NvnJ6g5aDpuVON8M70sRc0Euw"
-                            width="100%" height="100%" style="border:0; min-height: 350px;" allowfullscreen=""
-                            loading="lazy"></iframe>
+                            width="100%" height="100%" class="map-frame" allowfullscreen="" loading="lazy"></iframe>
                         <a href="https://www.google.com/maps/dir/?api=1&destination=Via+Mombarcaro+47+Torino"
                             target="_blank" rel="noopener noreferrer" class="map-cta-mobile">
                             <span data-lang="it">Apri in Maps</span>
@@ -330,7 +373,7 @@
         -->
 
         <!-- --- Check-in/Check-out Section --- -->
-        <section id="checkin-checkout" class="content-section" style="background-color: var(--light-gray);">
+        <section id="checkin-checkout" class="content-section bg-light">
             <div class="container">
                 <h2 class="section-title">
                     <span data-lang="it">Check-in e Check-out</span>
@@ -370,7 +413,7 @@
         </section>
 
         <!-- --- Services Section --- -->
-        <section id="services" class="content-section" style="background-color: var(--light-gray);">
+        <section id="services" class="content-section bg-light">
             <div class="container">
                 <h2 class="section-title">
                     <span data-lang="it">Servizi</span>
@@ -403,19 +446,19 @@
 
         <!-- --- Booking Section --- -->
         <section id="booking" class="content-section booking-section section-updated">
-            <div class="container" style="text-align: center;">
+            <div class="container text-center">
                 <h2 class="section-title">
                     <span data-lang="it">Prenota il Tuo Soggiorno</span>
                     <span data-lang="en">Book Your Stay</span>
                 </h2>
-                <p style="max-width: 600px; margin: 0 auto 2rem auto;">
+                <p class="booking-desc">
                     <span data-lang="it">Vivi un'esperienza unica a Torino. Controlla la disponibilità e prenota ora
                         la
                         tua vacanza da sogno.</span>
                     <span data-lang="en">Live a unique experience in Turin. Check availability and book your dream
                         vacation now.</span>
                 </p>
-                <p style="text-align: center;">
+                <p class="text-center">
                     <strong>
                         <span data-lang="it">Seleziona le date libere di tuo interesse e clicca "RICHIEDI INFO
                             ALL'HOST"<br>riceverai a breve la nostra conferma e le informazioni.</span>
