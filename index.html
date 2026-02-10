@@ -484,7 +484,9 @@
         let meseCorrente = new Date().getMonth();
         let annoCorrente = new Date().getFullYear();
         let dateSelezionate = [];
-        const emailProprietario = 'serendipityholidayhome.torino@gmail.com';
+        const emailUser = 'serendipityholidayhome.torino';
+        const emailDom = 'gmail.com';
+        const emailProprietario = emailUser + '@' + emailDom;
 
         function caricaDati(callback) {
             fetch(urlCSV)
@@ -494,9 +496,11 @@
                     righe.forEach(riga => {
                         const [data, stato] = riga.split(",");
                         if (data && stato) { // Aggiunto controllo per righe vuote
-                            const [gg, mm, aaaa] = data.trim().split("/"); // formato DD/MM/YYYY
+                            const cleanData = data.replace(/"/g, '').trim();
+                            const cleanStato = stato.replace(/"/g, '').trim();
+                            const [gg, mm, aaaa] = cleanData.split("/"); // formato DD/MM/YYYY
                             const dataISO = `${aaaa}-${mm.padStart(2, "0")}-${gg.padStart(2, "0")}`;
-                            disponibilita[dataISO] = stato.trim().toLowerCase();
+                            disponibilita[dataISO] = cleanStato.toLowerCase();
                         }
                     });
                     callback();
